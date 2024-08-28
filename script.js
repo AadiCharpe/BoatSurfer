@@ -25,10 +25,17 @@ scene("title", ()=>{
         anchor("center"),
         pos(width()/2, height()/1.25),
     ])
-    onKeyPress("space", ()=>{go("game")})
+    onKeyPress("space", ()=>{go("game");})
 })
 
 let score = 0;
+
+loadSound("game", "sfx/video-game-music-loop-27629.mp3");
+
+const music = play("game", { 
+    loop: true,
+    paused: true
+})
 
 scene("game", ()=>{
     let column = 2;
@@ -41,6 +48,12 @@ scene("game", ()=>{
     loadSprite("log", "sprites/Wooden-logs-icon-Cartoon-lumber-Hardwo-Graphics-70713646-1-removebg-preview.png");
     loadSprite("coin", "sprites/one-gold-coin-icon-in-cartoon-style-vector-24279928-removebg-preview.png");
     loadSprite("waterline", "sprites/waterline.png");
+
+    loadSound("gameover", "sfx/game-over-38511.mp3");
+    loadSound("coin", "sfx/coin-recieved-230517.mp3");
+
+    music.paused = false
+
     add ([
         rect(width(), height()),
         color(49, 155, 235),
@@ -128,17 +141,19 @@ scene("game", ()=>{
                 pos(lanes[Math.floor(Math.random() * 3)], 0),
                 "obstacle"
             ])
-            e.push(o)
+            e.push(o);
         }
     })
     player.onCollide("obstacle", ()=>{
-        go("gameover")
+        play("gameover");
+        go("gameover");
     })
     player.onCollide("coin", (obj)=>{
         score++;
         scoreCount.text = "Score: " + score;
         e.shift();
         obj.destroy();
+        play("coin");
     })
     onUpdate(()=>{
         if(column == 1)
@@ -165,6 +180,7 @@ scene("game", ()=>{
 })
 
 scene("gameover", ()=>{
+    music.paused = true;
     add([
         rect(width(), height()),
         color(255, 0, 0),
