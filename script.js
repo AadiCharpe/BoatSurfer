@@ -121,8 +121,8 @@ scene("game", ()=>{
         readd(rope2);
         readd(scoreCount);
     })
-    loop(3.5, ()=>{
-        if(Math.floor(Math.random() * 3) == 0) {
+    loop(2, ()=>{
+        if(Math.floor(Math.random() * 5) == 0) {
             let c = add([
                 sprite("coin"),
                 anchor("center"),
@@ -163,14 +163,14 @@ scene("game", ()=>{
         else
             player.pos.x = lanes[2];
         for(const obj of e) {
-            obj.move(0, 100);
+            obj.move(0, 200);
             if(obj.pos.y > height()) {
                 e.shift();
                 obj.destroy();
             }
         }
         for(const obj of waterlines) {
-            obj.move(0, 100);
+            obj.move(0, 200);
             if(obj.pos.y > height()) {
                 waterlines.shift();
                 obj.destroy();
