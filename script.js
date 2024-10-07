@@ -1,6 +1,9 @@
 import kaboom from "https://unpkg.com/kaboom@3000.0.1/dist/kaboom.mjs";
 
-kaboom()
+kaboom({
+    width: 1000,
+    height: 600
+});
 
 scene("title", ()=>{
     add ([
@@ -15,17 +18,17 @@ scene("title", ()=>{
         scale(2)
     ])
     add ([
-        text("Press Space to Start"),
+        text("Click to Start"),
         anchor("center"),
         pos(width()/2, height()/2),
         scale(1.5)
     ])
     add ([
-        text("Left and Right Arrow to Switch Lanes"),
+        text("Left and Right Arrow or Tap to Switch Lanes"),
         anchor("center"),
         pos(width()/2, height()/1.25),
     ])
-    onKeyPress("space", ()=>{go("game");})
+    onClick(()=>{go("game");});
 })
 
 let score = 0;
@@ -52,7 +55,7 @@ scene("game", ()=>{
     loadSound("gameover", "sfx/game-over-38511.mp3");
     loadSound("coin", "sfx/coin-recieved-230517.mp3");
 
-    music.paused = false
+    music.paused = false;
 
     add ([
         rect(width(), height()),
@@ -60,8 +63,8 @@ scene("game", ()=>{
         pos(0, 0)
     ])
 
-    const obstacles = ["rock", "shark", "log"]
-    const lanes = [width() / 4, width() / 2, width() / 1.35]
+    const obstacles = ["rock", "shark", "log"];
+    const lanes = [width() / 4, width() / 2, width() / 1.35];
     const player = add ([
         sprite("boat"),
         scale(0.4),
@@ -90,6 +93,14 @@ scene("game", ()=>{
     onKeyPress("left", ()=>{
         if(column > 1)
             column--;
+    })
+    onClick(()=>{
+        if(mousePos().x < width() / 2) {
+            if(column > 1)
+                column--;
+        } else
+            if(column < 3)
+                column++;
     })
     onKeyPress("right", ()=>{
         if(column < 3)
@@ -131,7 +142,7 @@ scene("game", ()=>{
                 pos(lanes[Math.floor(Math.random() * 3)], 0),
                 "coin"
             ])
-            e.push(c)
+            e.push(c);
         } else {
             let o = add([
                 sprite(obstacles[Math.floor(Math.random() * 3)]),
@@ -199,13 +210,13 @@ scene("gameover", ()=>{
         pos(width() / 2, height() / 2)
     ])
     add([
-        text("Press Space to Restart"),
+        text("Click to Restart"),
         color(0, 0, 0),
         anchor("center"),
         scale(1.5),
         pos(width() / 2, height() / 1.5)
     ])
-    onKeyPress("space", ()=>{go("title")})
+    onClick(()=>{go("game");});
 })
 
-go("title")
+go("title");
